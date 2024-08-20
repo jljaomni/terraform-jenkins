@@ -1,9 +1,8 @@
-
-
 terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
+      version = "~> 5.0"
     }
   }
 }
@@ -20,7 +19,7 @@ locals {
 module "ecs" {
   source = "terraform-aws-modules/ecs/aws"
 
-  name         = "jenkins-ecs-cluster"
+  name = "jenkins-ecs-cluster"
   cluster_name = "jenkins-cluster"
 
   vpc_id  = module.vpc.vpc_id
