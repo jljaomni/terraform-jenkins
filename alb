@@ -1,6 +1,6 @@
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "8.0.0" # Verifica que esté actualizado según la última versión disponible
+  version = "9.11.0"
 
   name               = "jenkins-alb"
   load_balancer_type = "application"
@@ -10,6 +10,7 @@ module "alb" {
 
   security_groups = [module.terraform-sg.security_group_id]
 
+  
   http_tcp_listeners = [
     {
       port               = 80
@@ -20,7 +21,7 @@ module "alb" {
 
   target_groups = [
     {
-      name_prefix      = "jenkins-tg"
+      name_prefix      = "jtg"
       backend_protocol = "HTTP"
       backend_port     = 8080
       target_type      = "ip"
