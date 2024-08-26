@@ -26,49 +26,61 @@ module "ecs" {
     }
   }
 
-  services = {
+ services = {
     jenkins-service = {
       cpu    = 1024
       memory = 4096
 
       # Container definition(s)
-      container_definitions = {
-        jenkins = {
+      container_definitions = jsonencode([
+        {
+          name      = "jenkins"
           cpu       = 512
           memory    = 1024
           essential = true
           image     = "jenkins/jenkins:lts"
-          port_mappings = [
+          portMappings = [
             {
               containerPort = 80
               protocol      = "tcp"
             }
           ]
-          readonly_root_filesystem = false
-         
-          service_connect_configuration = {
-            namespace = "jenkins-namespace"
-            service = {
-              client_alias = {
-                port     = 80
-                dns_name = "ecs-jenkins-service"
-              }
-              port_name      = "ecs-jenkins-service"
-              discovery_name = "ecs-jenkins-service"
+          readonlyRootFilesystem = false
+          mountPoints = [
+            {
+              sourceVolume  = "jenkins-data"
+              containerPath = "/var/jenkins_home"
+              readOnly      = false
             }
+          ]
+          serviceConnectConfiguration = {
+            namespace = "jenkins-namespace"
+            services = [
+              {
+                port_name      = "ecs-jenkins-service"
+                discovery_name = "ecs-jenkins-service"
+                client_aliases = [
+                  {
+                    port     = 80
+                    dns_name = "ecs-jenkins-service"
+                  }
+                ]
+              }
+            ]
           }
         }
-      }
+      ])
 
-      /*  load_balancer = {
+      # Load balancer configuration
+      load_balancer = {
         service = {
-          target_group_arn = [module.alb.target_groups]
+          target_group_arn = aws_lb_target_group.ecs.arn
           container_name   = "jenkins"
           container_port   = 80
         }
-      } */
+      }
 
-      subnet_ids = module.vpc.public_subnets
+      subnet_ids = module.vpc.private_subnets
 
       security_groups = [aws_security_group.ecs_service_sg.id]
 
