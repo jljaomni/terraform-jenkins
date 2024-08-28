@@ -16,13 +16,15 @@ resource "aws_lb" "this" {
 
 resource "aws_lb_target_group" "ecs" {
   name     = "ecs-tg"
-  port     = 80
+  port     = 8080
   protocol = "HTTP"
   vpc_id   = module.vpc.vpc_id
 
+  target_type = "ip"
+
   health_check {
     interval            = 30
-    path                = "/"
+    path                = "/login"
     timeout             = 5
     healthy_threshold   = 5
     unhealthy_threshold = 2
@@ -44,25 +46,4 @@ resource "aws_lb_listener" "http" {
   }
 }
 
-resource "aws_security_group" "alb_sg" {
-  name   = "alb-sg"
-  vpc_id = module.vpc.vpc_id
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "alb-sg"
-  }
-}
