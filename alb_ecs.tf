@@ -23,9 +23,9 @@ resource "aws_lb_target_group" "ecs" {
   target_type = "ip"
 
   health_check {
-    interval            = 30
+    interval            = 60
     path                = "/login"
-    timeout             = 5
+    timeout             = 10
     healthy_threshold   = 5
     unhealthy_threshold = 2
     matcher             = "200-299"
