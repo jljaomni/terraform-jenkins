@@ -23,13 +23,13 @@ resource "aws_ecs_task_definition" "jenkins_task" {
       }
     ]
 
-    /* mountPoints = [
+    mountPoints = [
       {
         sourceVolume  = "jenkins-data"
         containerPath = "/var/jenkins_home"
         readOnly      = false
       }
-    ] */
+    ] 
 
     readonlyRootFilesystem = false
 
@@ -44,15 +44,20 @@ resource "aws_ecs_task_definition" "jenkins_task" {
   }])
 
 
-/*   volume {
+   volume {
     name = "jenkins-data"
 
     efs_volume_configuration {
       file_system_id = aws_efs_file_system.jenkins_efs.id
       root_directory = "/"
+      transit_encryption = "ENABLED"
+      authorization_config {
+        access_point_id = aws_efs_access_point.jenkins_ap.id
+        iam = "ENABLED"
+      }
     }
   }
- */
+ 
   execution_role_arn = aws_iam_role.ecs_task_execution_role_tf.arn
   task_role_arn      = aws_iam_role.ecs_task_role.arn
 }
