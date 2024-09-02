@@ -19,6 +19,10 @@ output "alb_dns_name" {
   value = aws_lb.this.dns_name
 }
 
-output "target_group_arn" {
-  value = aws_lb_target_group.ecs.arn
+output "target_group_arn_jenkins" {
+  value = aws_lb_target_group.jenkins_tg.arn
+}
+
+output "target_group_arn_sonarqube" {
+  value = aws_lb_target_group.sonarqube_tg.arn
 }

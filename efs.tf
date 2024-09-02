@@ -34,3 +34,22 @@ resource "aws_efs_access_point" "jenkins_ap" {
     }
   }
 }
+
+
+resource "aws_efs_access_point" "sonarqube_ap" {
+  file_system_id = aws_efs_file_system.jenkins_efs.id
+
+  posix_user {
+    uid = 1001  # Un UID diferente para SonarQube
+    gid = 1001  # Un GID diferente para SonarQube
+  }
+
+  root_directory {
+    path = "/sonarqube-data"
+    creation_info {
+      owner_uid   = 1001
+      owner_gid   = 1001
+      permissions = "775"
+    }
+  }
+}
