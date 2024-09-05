@@ -19,7 +19,6 @@ resource "aws_lb_target_group" "jenkins_tg" {
   port     = 8080
   protocol = "HTTP"
   vpc_id   = module.vpc.vpc_id
-
   target_type = "ip"
 
 
@@ -29,7 +28,7 @@ resource "aws_lb_target_group" "jenkins_tg" {
     timeout             = 10
     healthy_threshold   = 5
     unhealthy_threshold = 2
-    matcher             = "200-299"
+    matcher             = "200-499"
   }
 
   tags = {
@@ -75,7 +74,7 @@ resource "aws_lb_listener_rule" "jenkins_rule" {
 
    condition {
     path_pattern {
-      values = ["/jenkins/*"]
+      values = ["/jenkins/*", "/jenkins/", "/jenkins*"]
       }
     }
 }
@@ -91,7 +90,7 @@ resource "aws_lb_listener_rule" "sonarqube_rule" {
 
   condition {
     path_pattern {
-      values = ["/sonarqube/*"]
+      values = ["/sonarqube/*", "/sonarqube/", "/sonarqube*"]
       }
     }
 }
@@ -112,7 +111,7 @@ resource "aws_lb_target_group" "sonarqube_tg" {
     timeout             = 10
     healthy_threshold   = 5
     unhealthy_threshold = 2
-    matcher             = "200-299"
+    matcher             = "200-499"
   }
 
   tags = {

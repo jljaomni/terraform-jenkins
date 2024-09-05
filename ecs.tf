@@ -6,15 +6,15 @@ resource "aws_ecs_task_definition" "jenkins_sonarqube_task" {
   family                   = "jenkins-sonarqube-task"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
-  cpu                      = "1024"
-  memory                   = "2048"
+  cpu                      = "2048"
+  memory                   = "4096"
 
   container_definitions = jsonencode([{
     name      = "jenkins"
     image     = "jenkins/jenkins:lts-jdk17"
     essential = true
-    cpu       = 512
-    memory    = 1024
+    cpu       = 1024
+    memory    = 2048
 
     portMappings = [
       {
@@ -53,8 +53,8 @@ resource "aws_ecs_task_definition" "jenkins_sonarqube_task" {
       name      = "sonarqube"
       image     = "sonarqube:lts-community"
       essential = true
-      cpu       = 512
-      memory    = 1024
+      cpu       = 1024
+      memory    = 2048
 
       portMappings = [
         {
