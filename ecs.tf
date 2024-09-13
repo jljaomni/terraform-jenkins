@@ -83,6 +83,14 @@ resource "aws_ecs_task_definition" "jenkins_sonarqube_task" {
         {
           name  = "SONARQUBE_JDBC_URL"
           value = "jdbc:postgresql://db_host:5432/sonar"
+        },
+        {
+          name  = "SONAR_WEB_CONTEXT"
+          value = "/sonarqube"
+        },
+        {
+          name  = "SONAR_SEARCH_NODE_MAX_LOCAL_STORAGE_NODES"
+          value = "2"
         }
       ]
 

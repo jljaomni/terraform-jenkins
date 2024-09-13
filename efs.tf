@@ -15,6 +15,7 @@ resource "aws_efs_mount_target" "jenkins_efs_mount" {
     file_system_id = aws_efs_file_system.jenkins_efs.id
     subnet_id = each.value
     security_groups = [aws_security_group.efs_sg.id]
+    depends_on = [module.vpc.private_subnets]
 } 
 
 resource "aws_efs_access_point" "jenkins_ap" {

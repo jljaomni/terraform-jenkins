@@ -56,7 +56,7 @@ resource "aws_lb_target_group" "jenkins_tg" {
   default_action {
     type = "fixed-response"
     fixed_response {
-      content_type = "text/plain"
+      content_type = "text/css"
       message_body = "404: Not Found But 200 OK to test"
       status_code  = "200"
     }
